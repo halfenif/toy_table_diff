@@ -1,4 +1,5 @@
 import random
+import secrets
 from uuid_extensions import uuid7, uuid7str
 
 from db_const import idx_idx            
@@ -51,30 +52,52 @@ def make_data(cursor):
 
     # print(str_insert_left)
 
-    data_count = 1000000 #100만건
-    data = []
+    data_count = 100 #100만건
+    data_origin = []
+    data_modify = []
+
     for i in range(data_count):
         target = random.choice(["Left", "Right", "Both"])
 
-        data.clear()
+        data_origin.clear()
+        data_modify.clear()
 
         for item in items:
             if item[idx_type] == "k":
-                data.append(uuid7str())
+                str_data = uuid7str()
+                data_origin.append(str_data)
+                data_modify.append(str_data)
             elif item[idx_type] == "s":
-                data.append(uuid7str())
+                str_data = uuid7str()
+                data_origin.append(str_data)
+                if random.choice([True, False]):
+                    str_data = uuid7str()
+                data_modify.append(str_data)
             elif item[idx_type] == "i":
-                data.append(random.randint(0, 100000))
+                int_data = secrets.randbits(10)
+                data_origin.append(int_data)
+                if random.choice([True, False]):
+                    int_data = secrets.randbits(10)
+                data_modify.append(int_data)
             elif item[idx_type] == "r":
-                data.append(round(random.uniform(0.0, 1000000.0), 2))
+                real_data = round(random.uniform(0.0, 1000000.0), 2)
+                data_origin.append(real_data)
+                if random.choice([True, False]):
+                    real_data = round(random.uniform(0.0, 1000000.0), 2)
+                data_modify.append(real_data)
         # End of For
 
-        # Insert
-        # print(str_insert_left)
-        # print(data)
-        cursor.execute(str_insert_left, data)
 
-        if i % 10000 == 0:
+        choice = random.choice(['L','R','B'])
+        if choice == 'L':
+            cursor.execute(str_insert_left,  data_origin)
+        elif choice == 'R':
+            cursor.execute(str_insert_right, data_origin)
+        else:
+            cursor.execute(str_insert_left,  data_origin)
+            cursor.execute(str_insert_right, data_modify)
+
+        if i > 0 and i % 10000 == 0:
             print(f'{format(i,",d").rjust(10)} records processed')
 
     # End of For
