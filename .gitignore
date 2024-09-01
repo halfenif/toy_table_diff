@@ -3,3 +3,5 @@ __pycache__
 *.db
 *.zip
 data_report
+packages
+packages.zip
