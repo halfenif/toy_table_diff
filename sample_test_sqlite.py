@@ -18,7 +18,7 @@ force_crate = True
 connection = sqlite3.connect(dbfile_name)
 
 # Create Table
-db.create_table(connection, items, force_crate)
+db.create_table(db_type, connection, items, force_crate)
 
 
 cursor = connection.cursor()     
