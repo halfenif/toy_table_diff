@@ -2,3 +2,10 @@ pip freeze > requirements.txt
 pip download -r requirements.txt -d ./packages
 pip install --no-index --find-links=./packages -r requirements.txt
 
+
+
+git fetch origin: 원격 저장소에서 변경 사항 가져오기.
+git checkout <local-branch>: 병합할 로컬 브랜치로 이동.
+git merge origin/<remote-branch>: 원격 브랜치의 변경 사항 병합.
+(필요 시) 충돌 해결 후 git commit.
+git push origin <local-branch>: 병합된 브랜치를 원격에 푸시 (선택 사항).
