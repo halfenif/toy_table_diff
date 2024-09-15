@@ -20,6 +20,14 @@ def make_data(cursor):
 
     fake = Faker()
 
+
+    group_list = []
+    group_lengh = 10
+    
+    for i in range(1,group_lengh +1):
+        group_list.append(uuid7str())
+    
+
     # init col
     str_col_left   = ""
     str_col_right  = ""
@@ -43,6 +51,13 @@ def make_data(cursor):
         str_val_left   += f":{idx}"
         str_val_right  += f":{idx}"
     # End of For
+
+    # Group ID
+    str_col_left   += f",col_group_id"
+    str_col_right  += f",col_group_id"
+
+    str_val_left   += f",:col_group_id"
+    str_val_right  += f",:col_group_id"
 
     # Insert Sql
     str_insert_left   = f"insert into {table_name_left}   ({str_col_left})   values ({str_val_left})  "
@@ -95,6 +110,14 @@ def make_data(cursor):
                 data_modify.append(real_data)
         # End of For
 
+        i_group_id_idx = random.randint(0,group_lengh-1)
+        # print(i_group_id_idx)
+        str_group_id = group_list[i_group_id_idx]
+        data_origin.append(str_group_id)
+        data_modify.append(str_group_id)
+
+
+        # print(str_insert_left)
 
         choice = random.choice(['L','R','B'])
         if choice == 'L':
