@@ -1,5 +1,5 @@
-pip freeze > requirements.txt
-pip download -r requirements.txt -d ./packages
+pip freeze > requirements_linux.txt
+pip download -r requirements_linux.txt -d ./packages
 pip install --no-index --find-links=./packages -r requirements.txt
 
 
