@@ -6,6 +6,10 @@ from db_const import idx_col_left
 from db_const import idx_col_right      
 from db_const import idx_type           
 
+from db_const import idx_result_idx
+from db_const import idx_result_col
+from db_const import idx_result_type
+
 from db_const import table_name_left   
 from db_const import table_name_right  
 from db_const import table_name_result 
@@ -15,7 +19,7 @@ from db_const import db_type_oracle
 
 class db:
     @staticmethod
-    def create_table(db_type, db_connection, items, force_crate):
+    def create_table(db_type, db_connection, items, results, force_crate):
 
         if db_type == db_type_sqlite:
             str_type_string = "TEXT"
@@ -42,29 +46,42 @@ class db:
             if str_col_left:
                 str_table_left   += ","
                 str_table_right  += ","
-                str_table_result += ","
 
             if item[idx_type] == "k":
                 str_col_left   = f"{item[idx_col_left] } {str_type_string}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_string}"
-                str_col_result = f"{item[idx_col_right]} {str_type_string}"
             elif item[idx_type] == "s":
                 str_col_left   = f"{item[idx_col_left] } {str_type_string}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_string}"
-                str_col_result = f"{item[idx_col_right]} {str_type_string}"
             elif item[idx_type] == "i":
                 str_col_left   = f"{item[idx_col_left] } {str_type_int}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_int}"
-                str_col_result = f"{item[idx_col_right]} {str_type_int}"
             elif item[idx_type] == "r":
                 str_col_left   = f"{item[idx_col_left] } {str_type_real}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_real}"
-                str_col_result = f"{item[idx_col_right]} {str_type_real}"
             
             str_table_left   += str_col_left
             str_table_right  += str_col_right
+        # End of For
+
+        for item in results:
+            if str_col_result:
+                str_table_result += ","
+
+            if item[idx_result_type] == "k":
+                str_col_result = f"{item[idx_result_col]} {str_type_string}"
+            elif item[idx_result_type] == "s":
+                str_col_result = f"{item[idx_result_col]} {str_type_string}"
+            elif item[idx_result_type] == "i":
+                str_col_result = f"{item[idx_result_col]} {str_type_int}"
+            elif item[idx_result_type] == "r":
+                str_col_result = f"{item[idx_result_col]} {str_type_real}"
+            else:
+                print(f"else: {item[idx_result_type]} {item[idx_result_col]}")
+            
             str_table_result += str_col_result
         # End of For
+
 
         str_table_left   += ")"
         str_table_right  += ")"
@@ -72,6 +89,7 @@ class db:
 
         # print(str_table_left)
         # print(str_table_right)
+        # print(str_table_result)
 
         # Connect DB
         connection = db_connection

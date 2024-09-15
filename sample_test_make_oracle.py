@@ -5,6 +5,7 @@ import oracledb
 
 import sample_test_make_data
 from db_item_a import items
+from db_item_a import results
 
 from db_const import db_type_oracle     as db_type
 from db_const import db_oracle_user
@@ -18,7 +19,7 @@ force_crate = True
 connection = oracledb.connect(user=db_oracle_user, password=db_oracle_pass, dsn=db_oracle_conn)
 
 # Create Table
-db.create_table(db_type, connection, items, force_crate)
+db.create_table(db_type, connection, items, results, force_crate)
 
 
 cursor = connection.cursor()     

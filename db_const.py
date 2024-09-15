@@ -4,6 +4,12 @@ idx_col_left  = 2
 idx_col_right = 3
 idx_type      = 4
 
+
+idx_result_idx  = 0
+idx_result_desc = 1
+idx_result_col  = 2
+idx_result_type = 3
+
 table_name_left   = "left"
 table_name_right  = "right"
 table_name_result = "result"
