@@ -26,7 +26,7 @@ class db:
             str_type_int    = "INT"
             str_type_real   = "REAL"
         elif db_type == db_type_oracle:
-            str_type_string = "VARCHAR2(50)"
+            str_type_string = "VARCHAR2(200)"
             str_type_int    = "NUMBER(10)"
             str_type_real   = "NUMBER(15,2)"            
         else:
@@ -50,7 +50,7 @@ class db:
             if item[idx_type] == "k":
                 str_col_left   = f"{item[idx_col_left] } {str_type_string}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_string}"
-            elif item[idx_type] == "s":
+            elif str(item[idx_type]).startswith("s"):
                 str_col_left   = f"{item[idx_col_left] } {str_type_string}"
                 str_col_right  = f"{item[idx_col_right]} {str_type_string}"
             elif item[idx_type] == "i":
@@ -70,7 +70,7 @@ class db:
 
             if item[idx_result_type] == "k":
                 str_col_result = f"{item[idx_result_col]} {str_type_string}"
-            elif item[idx_result_type] == "s":
+            elif str(item[idx_result_type]).startswith("s"):
                 str_col_result = f"{item[idx_result_col]} {str_type_string}"
             elif item[idx_result_type] == "i":
                 str_col_result = f"{item[idx_result_col]} {str_type_int}"
@@ -83,9 +83,9 @@ class db:
         # End of For
 
 
-        str_table_left   += ")"
-        str_table_right  += ")"
-        str_table_result += ")"
+        str_table_left   += f", col_group_id {str_type_string} )"
+        str_table_right  += f", col_group_id {str_type_string} )"
+        str_table_result += f")"
 
         # print(str_table_left)
         # print(str_table_right)
@@ -129,6 +129,8 @@ class db:
             #     cursor.execute(f"drop table {table_name_result}")                
 
         # create table
+
+        # print(str_table_left)
 
         cursor.execute(str_table_left)
         cursor.execute(str_table_right)

@@ -14,15 +14,18 @@ from db_const import table_name_result
 
 from db_item_a import items
 
+from faker import Faker
+
 def make_data(cursor):
+
+    fake = Faker()
+
     # init col
     str_col_left   = ""
     str_col_right  = ""
-    str_col_result = ""
 
     str_val_left   = ""
     str_val_right  = ""
-    str_val_result = ""
 
     idx = 0
     for item in items:
@@ -30,25 +33,20 @@ def make_data(cursor):
         if str_col_left:
             str_col_left   += ","
             str_col_right  += ","
-            str_col_result += ","
 
             str_val_left     += ","
             str_val_right    += ","
-            str_val_result   += ","        
 
         str_col_left   += f"{item[idx_col_left]}"
         str_col_right  += f"{item[idx_col_right]}"
-        str_col_result += f"{item[idx_col_right]}"
 
         str_val_left   += f":{idx}"
         str_val_right  += f":{idx}"
-        str_val_result += f":{idx}"
     # End of For
 
     # Insert Sql
-    str_insert_left   = f"insert into {table_name_left}   ({str_col_left})   values ({str_val_left})"
-    str_insert_right  = f"insert into {table_name_right}  ({str_col_right})  values ({str_val_right})"
-    str_insert_result = f"insert into {table_name_result} ({str_col_result}) values ({str_val_result})"
+    str_insert_left   = f"insert into {table_name_left}   ({str_col_left})   values ({str_val_left})  "
+    str_insert_right  = f"insert into {table_name_right}  ({str_col_right})  values ({str_val_right}) "
 
     # print(str_insert_left)
 
@@ -57,6 +55,10 @@ def make_data(cursor):
     data_modify = []
 
     for i in range(data_count):
+
+        if i > 0 and i % 10000 == 0:
+            print(f'{format(i,",d").rjust(10)} records processed')
+
         target = random.choice(["Left", "Right", "Both"])
 
         data_origin.clear()
@@ -67,8 +69,14 @@ def make_data(cursor):
                 str_data = uuid7str()
                 data_origin.append(str_data)
                 data_modify.append(str_data)
-            elif item[idx_type] == "s":
-                str_data = uuid7str()
+            elif str(item[idx_type]).startswith("s"):
+
+                if item[idx_type] == "s_name":
+                    str_data = fake.name().replace("\n"," ")
+                elif item[idx_type] == "s_address":
+                    str_data = fake.address().replace("\n"," ")
+                else:
+                    str_data = uuid7str()
                 data_origin.append(str_data)
                 if random.choice([True, False]):
                     str_data = uuid7str()
@@ -97,7 +105,5 @@ def make_data(cursor):
             cursor.execute(str_insert_left,  data_origin)
             cursor.execute(str_insert_right, data_modify)
 
-        if i > 0 and i % 10000 == 0:
-            print(f'{format(i,",d").rjust(10)} records processed')
 
     # End of For
