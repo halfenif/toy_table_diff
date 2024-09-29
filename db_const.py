@@ -16,7 +16,9 @@ table_name_result = "result"
 
 db_type_sqlite = "sqlite"
 db_type_oracle = "oracle"
+db_type_mariadb = "mariadb"
 
+db_mariadb_uri = "mariadb+pymysql://user:user@localhost:3306/database"
 
 db_sqlite_filename = "test.db"
 
