@@ -22,34 +22,31 @@ metadata = MetaData()
 table_left = Table('left', metadata, autoload_with=engine)
 
 with engine.connect() as connection:
-
-
-    values = []
     
+    for commit_count in range(1000):
+        values = []
+        for idx in range(1000):
+            row = {}
+            row["col-PK"] = uuid7str()
+            row["col-001"] = secrets.randbits(10)
+            row["col-002"] = secrets.randbits(10)
+            row["col-003"] = secrets.randbits(10)
+            row["col-004"] = round(random.uniform(0.0, 1000000.0), 2)
+            row["col-005"] = round(random.uniform(0.0, 1000000.0), 2)
+            row["col-006"] = round(random.uniform(0.0, 1000000.0), 2)
+            row["col-007"] = fake.name().replace("\n"," ")
+            row["col-008"] = fake.address().replace("\n"," ")
+            row["col-009"] = uuid7str()
 
-    for idx in range(100):
-        row = {}
+            values.append(row)
 
-        row["col-PK"] = uuid7str()
-        row["col-001"] = secrets.randbits(10)
-        row["col-002"] = secrets.randbits(10)
-        row["col-003"] = secrets.randbits(10)
-        row["col-004"] = round(random.uniform(0.0, 1000000.0), 2)
-        row["col-005"] = round(random.uniform(0.0, 1000000.0), 2)
-        row["col-006"] = round(random.uniform(0.0, 1000000.0), 2)
-        row["col-007"] = fake.name().replace("\n"," ")
-        row["col-008"] = fake.address().replace("\n"," ")
-        row["col-009"] = uuid7str()
+        
+        insert_sql = table_left.insert().values(values)
 
-        values.append(row)
+        result =connection.execute(insert_sql)
+        connection.commit()
 
-    
-    insert_sql = table_left.insert().values(values)
-
-    result =connection.execute(insert_sql)
-    connection.commit()
-
-    print(f"Inserted {result.rowcount}")
+        print(f"Inserted {commit_count} * {result.rowcount}")
 
     # select_query = table_left.select()
     # result = connection.execute(select_query)      
